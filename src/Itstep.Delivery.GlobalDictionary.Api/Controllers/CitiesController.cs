@@ -29,4 +29,17 @@ public class CitiesController : ControllerBase
         var cities = await _dbContext.Cities.FindAsync(id);
         return Ok(cities);
     }
+    [HttpPost("post-one-city")]
+    public async Task<IActionResult> PostOneCity(ModelCity modelCity)
+    {
+        City city = new City()
+        {
+            Name = modelCity.Name,
+            CountryId = modelCity.CountryId,
+            Country = await _dbContext.Countries.FindAsync(modelCity.CountryId)
+        };
+        _dbContext.Cities.Add(city);
+        await _dbContext.SaveChangesAsync();
+        return Ok();
+    }
 }
